@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 
 
 class HabitSerializer(serializers.ModelSerializer):
-    # Отображаем только ID пользователя — он сериализуется без проблем
     user = serializers.ReadOnlyField(source='user.id')
 
     class Meta:

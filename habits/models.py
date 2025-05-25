@@ -1,27 +1,23 @@
-from django.db import models
-from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from django.db import models
 
 User = get_user_model()
 
 
 class Habit(models.Model):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name="Пользователь"
-    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь")
     place = models.CharField(max_length=255, verbose_name="Место")
     time = models.TimeField(verbose_name="Время выполнения")
     action = models.CharField(max_length=255, verbose_name="Действие")
     is_pleasant = models.BooleanField(default=False, verbose_name="Приятная привычка")
     related_habit = models.ForeignKey(
-        'self',
+        "self",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        limit_choices_to={'is_pleasant': True},
-        verbose_name="Связанная привычка"
+        limit_choices_to={"is_pleasant": True},
+        verbose_name="Связанная привычка",
     )
     frequency = models.PositiveIntegerField(default=1, verbose_name="Периодичность (в днях)")
     reward = models.TextField(null=True, blank=True, verbose_name="Вознаграждение")

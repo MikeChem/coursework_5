@@ -1,10 +1,10 @@
 # habits/views.py
 
-from rest_framework import generics, permissions, viewsets
-from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.models import User
-from rest_framework import serializers, status
+from rest_framework import generics, permissions, serializers, status, viewsets
 from rest_framework.response import Response
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 from .models import Habit
 from .serializers import HabitSerializer
 
@@ -13,8 +13,8 @@ from .serializers import HabitSerializer
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'password']
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ["username", "password"]
+        extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
@@ -55,7 +55,7 @@ class PublicHabitListView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        return Habit.objects.filter(is_public=True)
+        return Habit.objects.filter(user=self.request.user)
 
 
 # ========== JWT Вход ==========

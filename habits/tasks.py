@@ -1,12 +1,11 @@
+# tasks.py
 from celery import shared_task
 import requests
 import os
 from dotenv import load_dotenv
 from .models import Habit
 
-
 load_dotenv()
-
 
 @shared_task
 def send_telegram_reminder(habit_id):
@@ -19,5 +18,5 @@ def send_telegram_reminder(habit_id):
         url = f"https://api.telegram.org/bot {bot_token}/sendMessage"
         data = {"chat_id": chat_id, "text": message}
         requests.post(url, data=data)
-    except Habit.DoesNotExist:
-        pass
+    except Exception as e:
+        print(f"[ERROR] Failed to send Telegram reminder: {e}")

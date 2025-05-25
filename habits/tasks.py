@@ -1,7 +1,9 @@
-from celery import shared_task
-import requests
 import os
+
+import requests
+from celery import shared_task
 from dotenv import load_dotenv
+
 from .models import Habit
 
 # Загружаем переменные окружения из .env файла
@@ -32,11 +34,7 @@ def send_telegram_reminder(habit_id):
 
         # URL для отправки сообщения
         url = f"https://api.telegram.org/bot {bot_token}/sendMessage"
-        data = {
-            "chat_id": chat_id,
-            "text": message,
-            "parse_mode": "Markdown"
-        }
+        data = {"chat_id": chat_id, "text": message, "parse_mode": "Markdown"}
 
         # Отправляем запрос
         response = requests.post(url, data=data)

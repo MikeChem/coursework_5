@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+from celery.schedules import crontab
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -26,7 +27,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_celery_beat",
     "habits",
-    'drf_spectacular',
+    "drf_spectacular",
 ]
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -49,7 +50,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
 ]
 CORS_ALLOW_ALL_ORIGINS = True  # или список доменов
 ROOT_URLCONF = "config.urls"
@@ -129,11 +130,18 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Celery
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
-CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
+CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", "redis://localhost:6379/0")
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = "UTC"
 
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+CELERY_BEAT_SCHEDULE = {
+    "daily-reminder": {
+        "task": "habits.tasks.send_telegram_reminder",
+        "schedule": crontab(hour=9, minute=0),  # Ежедневно в 9:00
+        "args": (1,),  # ID привычки для напоминания
+    },
+}
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")

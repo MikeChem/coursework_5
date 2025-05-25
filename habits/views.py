@@ -1,14 +1,15 @@
 from django.contrib.auth.models import User
-from rest_framework import generics, permissions, viewsets, serializers, status
-from rest_framework.response import Response
+from rest_framework import generics, permissions, serializers, viewsets
+from rest_framework.pagination import PageNumberPagination
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import Habit
 from .serializers import HabitSerializer
-from rest_framework.pagination import PageNumberPagination
+
 
 # ========== Сериализатор регистрации ==========
 class RegisterSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = User
         fields = ["username", "password"]
@@ -41,8 +42,9 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 # ========== Привычки текущего пользователя ==========
 class StandardResultsSetPagination(PageNumberPagination):
     """Пагинация по 5 записей на странице"""
+
     page_size = 5
-    page_size_query_param = 'page_size'
+    page_size_query_param = "page_size"
 
 
 class HabitViewSet(viewsets.ModelViewSet):

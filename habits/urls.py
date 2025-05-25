@@ -1,16 +1,13 @@
-# habits/urls.py
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import HabitViewSet, LoginView, PublicHabitViewSet, RegisterView
 
-from django.urls import path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
-from .views import HabitViewSet, LoginView, PublicHabitListView, RegisterView
+router = DefaultRouter()
+router.register(r'habits', HabitViewSet, basename='habit')  # добавлен basename
+router.register(r'public-habits', PublicHabitViewSet, basename='public-habit')
 
 urlpatterns = [
-    # Авторизация
-    path("register/", RegisterView.as_view(), name="register"),
-    path("login/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    # Привычки
-    path("habits/", HabitViewSet.as_view({"get": "list", "post": "create"})),
-    path("public/", PublicHabitListView.as_view(), name="public-habits"),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('', include(router.urls)),
 ]

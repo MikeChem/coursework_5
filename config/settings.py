@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "django_celery_beat",
     "habits",
     "drf_spectacular",
+    'corsheaders',
 ]
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",

@@ -9,7 +9,6 @@ from .serializers import HabitSerializer
 
 # ========== Сериализатор регистрации ==========
 class RegisterSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
         fields = ["username", "password"]
@@ -42,9 +41,8 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 # ========== Привычки текущего пользователя ==========
 class StandardResultsSetPagination(PageNumberPagination):
     """Пагинация по 5 записей на странице"""
-
     page_size = 5
-    page_size_query_param = "page_size"
+    page_size_query_param = 'page_size'
 
 
 class HabitViewSet(viewsets.ModelViewSet):
@@ -53,7 +51,7 @@ class HabitViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
-        return Habit.objects.filter(user=self.request.user)
+        return Habit.objects.filter(user=self.request.user).order_by('id')
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -61,7 +59,7 @@ class HabitViewSet(viewsets.ModelViewSet):
 
 # ========== Публичные привычки ==========
 class PublicHabitViewSet(viewsets.ModelViewSet):
-    queryset = Habit.objects.filter(is_public=True)
+    queryset = Habit.objects.filter(is_public=True).order_by('id')
     serializer_class = HabitSerializer
     pagination_class = StandardResultsSetPagination
-    permission_classes = [permissions.AllowAny]  # или []
+    permission_classes = [permissions.AllowAny]

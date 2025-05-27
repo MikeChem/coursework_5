@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from users.models import CustomUser as User
 from rest_framework import generics, permissions, serializers, viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -20,9 +20,9 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 # ========== Вьюшки регистрации и входа ==========
 class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    permission_classes = (permissions.AllowAny,)
+    queryset = User.objects.all()  # Теперь это CustomUser
     serializer_class = RegisterSerializer
+    permission_classes = (permissions.AllowAny,)
 
 
 class LoginView(TokenObtainPairView):

@@ -1,8 +1,6 @@
-from django.contrib.auth import get_user_model
+from users.models import CustomUser as User
 from django.core.exceptions import ValidationError
 from django.db import models
-
-User = get_user_model()
 
 
 class Habit(models.Model):

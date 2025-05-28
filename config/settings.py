@@ -4,7 +4,7 @@ from pathlib import Path
 from celery.schedules import crontab
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(encoding='utf-8')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, ".env"))
@@ -19,7 +19,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'users',
+    "users",  # users должен быть здесь
+    "habits",  # habits должен быть ниже users
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -27,10 +28,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_celery_beat",
-    "habits",
     "drf_spectacular",
-    'corsheaders',
+    "corsheaders",
 ]
+
+
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
@@ -85,7 +87,8 @@ DATABASES = {
         "USER": os.getenv("DB_USER"),
         "PASSWORD": os.getenv("DB_PASSWORD"),
         "HOST": os.getenv("DB_HOST", "localhost"),  # по умолчанию localhost
-        "PORT": os.getenv("DB_PORT", "5432"),  # по умолчанию 5432
+        "PORT": os.getenv("DB_PORT", "5432"),
+        "OPTIONS": {"client_encoding": "UTF8"},# по умолчанию 5432
     }
 }
 
